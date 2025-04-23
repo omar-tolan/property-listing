@@ -31,6 +31,12 @@ export class SuccessResponse extends ApiResponse {
     }
 }
 
+export class ResourceCreatedResponse extends ApiResponse {
+    constructor(message: string, data: any){
+        super(StatusCodes.CREATED, message, data)
+    }
+}
+
 export class NotFoundResponse extends ApiResponse {
     constructor(message: string, data: any){
         super(StatusCodes.NOT_FOUND, message, data)

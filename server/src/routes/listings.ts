@@ -3,7 +3,7 @@ import { getListings, createListing, getPropertyDetails } from "../controllers/l
 
 const listingsRouter = Router();
 
-listingsRouter.get("/", getListings);
+listingsRouter.get("/all", getListings);
 listingsRouter.get("/:id", getPropertyDetails);
 listingsRouter.post("/", createListing);
 

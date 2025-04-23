@@ -14,7 +14,8 @@
     "start": "node dist/index.js",
     "dev": "nodemon",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest --runInBand",
+    "coverage": "jest --coverage --runInBand"
   },
   "author": "",
   "license": "ISC",

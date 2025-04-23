@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { Property } from "../models/property";
 import { BadRequestError, NotFoundError } from "../core/api-error";
-import { SuccessResponse } from "../core/responses";
+import { ResourceCreatedResponse, SuccessResponse } from "../core/responses";
 import asyncHandler from "../utils/async-handler";
+import logger from "../config/logger";
 
 interface ListingQueryParams {
   type?: string;
@@ -106,6 +107,8 @@ export const getListings = asyncHandler(async (
 
 export const getPropertyDetails = asyncHandler(async(req: Request, res: Response) => {
   const unitId = req.params.id;
+  const validId = /^[0-9a-fA-F]{24}$/.test(unitId);
+  if(!validId) throw new BadRequestError("Invalid ID", { unitId });
   const unit = await Property.findById(unitId);
   if(!unit) throw new NotFoundError("Unit not found", { unitId });
   new SuccessResponse("Unit details fetched successfully", unit).send(res);
@@ -113,6 +116,7 @@ export const getPropertyDetails = asyncHandler(async(req: Request, res: Response
 
 export const createListing = asyncHandler(async (req: Request, res: Response) => {
   const listing = req.body;
+  if(Object.keys(listing).length === 0) throw new BadRequestError("Invalid request body", { listing });
   const newListing = await Property.create(listing);
-  new SuccessResponse("Listing created successfully", newListing).send(res);
+  new ResourceCreatedResponse("Listing created successfully", newListing).send(res);
 });
