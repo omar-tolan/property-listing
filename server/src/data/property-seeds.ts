@@ -1,4 +1,6 @@
-export const propertySeeds = [
+import { Property } from "../models/property";
+
+const propertySeeds = [
   {
     title: "Luxury Villa in New Cairo",
     type: "Villa",
@@ -203,8 +205,10 @@ export const propertySeeds = [
       downPayment: 25
     }
   },
-  // ... Adding more properties would follow the same pattern
-  // I'll show just these 6 for brevity, but the full file would contain 30 entries
-  // Each with unique locations across Egypt (New Cairo, Maadi, Sheikh Zayed, 
-  // 6th October, New Alamein, El Gouna, New Capital, Ain Sokhna, etc.)
 ];
+
+export const seedProperties = async () => {
+  if ((await Property.countDocuments()) > 0) return;
+  await Property.insertMany(propertySeeds);
+};
+

@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import path from "path";
 import logger from "./config/logger";
 import { connectDB } from "./config/db";
+import { seedProperties } from "./data/property-seeds";
 
 const app = require("./app");
 
@@ -9,6 +10,7 @@ const startServer = async () => {
   dotenv.config({ path: path.join(__dirname, "../dev.env") });
   const port = process.env.PORT || 3333;
   connectDB();
+  await seedProperties();
 
   app.listen(port, () => {
     logger.info("Server Started", {
