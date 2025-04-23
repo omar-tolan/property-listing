@@ -1,0 +1,118 @@
+import { Request, Response } from "express";
+import { Property } from "../models/property";
+import { BadRequestError, NotFoundError } from "../core/api-error";
+import { SuccessResponse } from "../core/responses";
+import asyncHandler from "../utils/async-handler";
+
+interface ListingQueryParams {
+  type?: string;
+  title?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  location?: string;
+  sortBy?: "price" | "createdAt";
+  sortDir?: "asc" | "desc";
+  page?: string;
+  limit?: string;
+}
+
+type ListingsQuery = {
+  type?: string;
+  title?: string;
+  price?: Record<string, number>;
+  location?: Record<string, any>;
+};
+
+type ListingSortOptions = {
+  price?: 1 | -1;
+  createdAt?: 1 | -1;
+};
+
+export const getListings = asyncHandler(async (
+  req: Request<{}, {}, {}, ListingQueryParams>,
+  res: Response
+) => {
+  const page = parseInt(req.query.page || "1");
+  const limit = Math.min(parseInt(req.query.limit || "10"), 50);
+  const skip = (page - 1) * limit;
+
+  const query: ListingsQuery = {};
+  const sortOptions: ListingSortOptions = {};
+
+  if (req.query.type) {
+    query.type = req.query.type;
+  }
+
+  if (req.query.title) {
+    query.title = req.query.title;
+  }
+
+  // Handle price range
+  if (req.query.minPrice || req.query.maxPrice) {
+    query.price = {};
+    if (req.query.minPrice) {
+      query.price.$gte = Number(req.query.minPrice);
+    }
+    if (req.query.maxPrice) {
+      query.price.$lte = Number(req.query.maxPrice);
+    }
+  }
+
+  // Handle location
+  if (req.query.location) {
+    const [lng, lat] = req.query.location.split(",").map((coord) => {
+      const num = Number(coord);
+      if (isNaN(num)) throw new BadRequestError("Invalid coordinates", {
+        location: req.query.location,
+      });
+      return num;
+    });
+
+    query.location = {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
+      },
+    };
+  }
+
+  // Build sort configuration
+  if (req.query.sortBy && req.query.sortDir) {
+    if (req.query.sortBy === "price") {
+      sortOptions.price = req.query.sortDir === "desc" ? -1 : 1;
+    } else if (req.query.sortBy === "createdAt") {
+      sortOptions.createdAt = req.query.sortDir === "desc" ? -1 : 1;
+    }
+  }
+
+  // Execute query with pagination
+  const [listings, total] = await Promise.all([
+    Property.find(query).sort(sortOptions).skip(skip).limit(limit),
+    Property.countDocuments(query),
+  ]);
+
+  new SuccessResponse("Listings fetched successfully", {
+    data: listings,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    },
+  }).send(res);
+});
+
+export const getPropertyDetails = asyncHandler(async(req: Request, res: Response) => {
+  const unitId = req.params.id;
+  const unit = await Property.findById(unitId);
+  if(!unit) throw new NotFoundError("Unit not found", { unitId });
+  new SuccessResponse("Unit details fetched successfully", unit).send(res);
+});
+
+export const createListing = asyncHandler(async (req: Request, res: Response) => {
+  const listing = req.body;
+  const newListing = await Property.create(listing);
+  new SuccessResponse("Listing created successfully", newListing).send(res);
+});
