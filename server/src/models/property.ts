@@ -95,6 +95,10 @@ import mongoose, { Document, Schema } from "mongoose";
   *           type: object
   *           description: Property location object with location type and coordinates
   *           properties:
+  *             title:
+  *               type: string
+  *               description: location title string
+  *               example: New Cairo
   *             type:
   *               type: string
   *               example: Point
@@ -165,6 +169,7 @@ interface IProperty extends Document {
   finishing: string;
   plans?: string[];
   location: {
+    title: string;
     type: string;
     coordinates: number[];
   };
@@ -199,6 +204,11 @@ const propertySchema: Schema<IProperty> = new Schema(
       min: 0,
     },
     location: {
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+      },
       type: {
         type: String,
         enum: ["Point"],
