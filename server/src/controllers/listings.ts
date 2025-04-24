@@ -29,6 +29,93 @@ type ListingSortOptions = {
   createdAt?: 1 | -1;
 };
 
+
+/**
+ * @swagger
+ * /listings/all:
+ *   get:
+ *     summary: Get a list of property listings
+ *     description: Retrieves property listings with filtering, sorting, and pagination
+ *     tags: [Listings]
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Filter by property type
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Search by title
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *         description: Minimum price
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *         description: Maximum price
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Comma-separated longitude and latitude
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [price, createdAt]
+ *         description: Field to sort by
+ *       - in: query
+ *         name: sortDir
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *         description: Sort direction
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *           maximum: 50
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Property'
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     total:
+ *                       type: integer
+ *                     pages:
+ *                       type: integer
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal Server Error
+ */
 export const getListings = asyncHandler(async (
   req: Request<{}, {}, {}, ListingQueryParams>,
   res: Response

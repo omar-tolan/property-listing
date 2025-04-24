@@ -2,14 +2,16 @@ import express, { NextFunction, Request, Response, ErrorRequestHandler } from 'e
 import { getRequestContext } from './utils/request-context';
 import { ApiError, InternalError } from './core/api-error';
 import listingsRouter from './routes/listings';
+import {swaggerSpec} from "./config/swagger"
+import swaggerUi from "swagger-ui-express"
 
 const port = process.env.PORT || 3333
 
 const app = express();
 
 app.use(express.json())
-
 app.use("/listings", listingsRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Handle all thrown errors
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
