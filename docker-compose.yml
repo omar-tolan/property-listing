@@ -1,0 +1,41 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 3333:3333
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - DB
+    command: npm run dev
+
+  DB:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo_user
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_password
+      - MONGO_INITDB_DATABASE=property_listing
+    volumes:
+      - DB_data:/data/db
+
+volumes:
+  DB_data:
+  server_logs:

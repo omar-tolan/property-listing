@@ -1,0 +1,7 @@
+export enum ErrorType {
+    INTERNAL = "INTERNAL",
+    NOT_FOUND = "NOT_FOUND",
+    BAD_REQUEST = "BAD_REQUEST",
+    NETWORK = "NETWORK",
+    UNAUTHORIZED = "UNAUTHORIZED"
+}

@@ -248,6 +248,11 @@ const propertySchema: Schema<IProperty> = new Schema(
         default: 0,
         min: 0,
       },
+      parkingArea: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
     },
     features: {
       bathrooms: {

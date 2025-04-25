@@ -1,7 +1,12 @@
 import winston, { format, transports } from 'winston';
 import path from 'path';
+import fs from 'fs'
 
 const logDir = path.join(process.cwd(), 'logs');
+
+if(!fs.existsSync(logDir)){
+  fs.mkdirSync(logDir);
+}
 
 const logger = winston.createLogger({
   level: 'info',
@@ -26,6 +31,19 @@ const logger = winston.createLogger({
     })
   ),
   transports: [
+    // Container console logs
+    new transports.Console({
+      format: format.combine(
+        format.colorize(),
+        format.printf(({ level, message, timestamp, ...metadata }) => {
+          let msg = `${timestamp} [${level}] : ${message}`;
+          if (Object.keys(metadata).length > 0) {
+            msg += ` ${JSON.stringify(metadata)}`;
+          }
+          return msg;
+        })
+      )
+    }),
     // Error log file
     new transports.File({ 
       filename: path.join(logDir, 'error.log'),

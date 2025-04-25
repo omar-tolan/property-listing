@@ -21,16 +21,17 @@ describe("Listings API", () => {
                 unit: 100,
                 garden: 0,
                 terrace: 0,
-                roof: 0
+                roof: 0,
+                parkingArea: 0
             },
             features: {
                 bathrooms: 2,
                 bedrooms: 3,
-                floors: 1,
-                parkingArea: 10
+                floors: 1
             },
             finishing: "Fully Finished",
             location: {
+                title: "Test Location",
                 type: "Point",
                 coordinates: [30.0, 30.0]
             },
@@ -72,16 +73,17 @@ describe("Listings API", () => {
                 unit: 100,
                 garden: 0,
                 terrace: 0,
-                roof: 0
+                roof: 0,
+                parkingArea: 0
             },
             features: {
                 bathrooms: 2,
                 bedrooms: 3,
-                floors: 1,
-                parkingArea: 10
+                floors: 1
             },
             finishing: "Fully Finished",
             location: {
+                title: "Test Location",
                 type: "Point",
                 coordinates: [30.0, 30.0]
             },
@@ -95,12 +97,18 @@ describe("Listings API", () => {
                 downPayment: 10
             }
         }
-        const response = await request("http://localhost:3333").post("/listings").send(reqBody);
+        const response = await request("http://localhost:3333")
+            .post("/listings")
+            .set('Content-Type', 'application/json')
+            .send(reqBody);
         expect(response.status).toBe(201);
     })
 
     test("Add Invalid Listing", async () => {
-        const response = await request("http://localhost:3333").post("/listings").send({});
+        const response = await request("http://localhost:3333")
+            .post("/listings")
+            .set('Content-Type', 'application/json')
+            .send({});
         expect(response.status).toBe(400);
     })
 })

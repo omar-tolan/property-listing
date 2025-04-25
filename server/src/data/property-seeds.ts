@@ -26,8 +26,9 @@ const propertySeeds = [
     finishing: "Fully Finished",
     plans: ["floor1.jpg", "floor2.jpg"],
     location: {
+      title: "New Cairo",
       type: "Point",
-      coordinates: [31.4913, 30.0171] // New Cairo
+      coordinates: [31.4913, 30.0171]
     },
     compound: {
       name: "Lake View",
@@ -54,13 +55,13 @@ const propertySeeds = [
     features: {
       bathrooms: 2,
       bedrooms: 3,
-      floors: 1,
-      parkingArea: 15
+      floors: 1
     },
     finishing: "Fully Finished",
     location: {
+      title: "Maadi",
       type: "Point",
-      coordinates: [31.2509, 29.9602] // Maadi
+      coordinates: [31.2509, 29.9602]
     },
     compound: {
       name: "Degla Gardens",
@@ -87,14 +88,14 @@ const propertySeeds = [
     features: {
       bathrooms: 4,
       bedrooms: 3,
-      floors: 1,
-      parkingArea: 30
+      floors: 1
     },
     finishing: "Fully Finished",
     plans: ["penthouse_layout.jpg"],
     location: {
+      title: "Sheikh Zayed",
       type: "Point",
-      coordinates: [31.0409, 30.0135] // Sheikh Zayed
+      coordinates: [31.0409, 30.0135]
     },
     compound: {
       name: "Zayed 2000",
@@ -121,13 +122,13 @@ const propertySeeds = [
     features: {
       bathrooms: 3,
       bedrooms: 3,
-      floors: 2,
-      parkingArea: 25
+      floors: 2
     },
     finishing: "Semi Finished",
     location: {
+      title: "6th of October",
       type: "Point",
-      coordinates: [30.9758, 29.9490] // 6th October
+      coordinates: [30.9758, 29.9490]
     },
     compound: {
       name: "Palm Hills",
@@ -154,13 +155,13 @@ const propertySeeds = [
     features: {
       bathrooms: 3,
       bedrooms: 2,
-      floors: 1,
-      parkingArea: 20
+      floors: 1
     },
     finishing: "Fully Finished",
     location: {
+      title: "New Alamein",
       type: "Point",
-      coordinates: [28.9544, 30.8282] // New Alamein
+      coordinates: [28.9544, 30.8282]
     },
     compound: {
       name: "North Edge",
@@ -187,13 +188,13 @@ const propertySeeds = [
     features: {
       bathrooms: 5,
       bedrooms: 4,
-      floors: 2,
-      parkingArea: 60
+      floors: 2
     },
     finishing: "Fully Finished",
     location: {
+      title: "El Gouna",
       type: "Point",
-      coordinates: [33.6751, 27.3840] // El Gouna
+      coordinates: [33.6751, 27.3840]
     },
     compound: {
       name: "Ancient Sands",
@@ -208,7 +209,21 @@ const propertySeeds = [
 ];
 
 export const seedProperties = async () => {
-  if ((await Property.countDocuments()) > 0) return;
-  await Property.insertMany(propertySeeds);
+  try {
+    console.log("Checking if properties already exist...");
+    const properties = await Property.find();
+
+    if (properties.length > 0) {
+      console.log(`Found ${properties.length} existing properties, skipping seed.`);
+      return;
+    }
+
+    console.log(`Inserting ${propertySeeds.length} properties...`);
+    await Property.insertMany(propertySeeds);
+    console.log("Properties inserted successfully");
+  } catch (error) {
+    console.error("Error seeding properties:", error);
+    throw error; // Re-throw to be caught by the caller
+  }
 };
 
