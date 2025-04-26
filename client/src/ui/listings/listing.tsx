@@ -10,7 +10,6 @@ import CreatedAt from "./components/created-at";
 import Amenities from "./components/amenities";
 import NavigationProvider from "../providers/navigation-provider";
 export default function Listing({ listing }: { listing: ListingProps }) {
-
   return (
     <NavigationProvider listingId={listing._id}>
     <div className="flex flex-col h-full bg-black border border-white/10 overflow-hidden rounded-2xl cursor-pointer hover:opacity-80"

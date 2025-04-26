@@ -6,7 +6,6 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-COPY docker.env ./
 
 EXPOSE 3333
 
