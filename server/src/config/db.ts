@@ -4,7 +4,7 @@ import { InternalError } from "../core/api-error";
 
 export const connectDB = async () => {
   try {
-    const uri = process.env.DEV_MONGO_URI != "" ? process.env.DEV_MONGO_URI : process.env.MONGO_URI;
+    const uri = process.env.MONGO_URI;
     if (!uri)
       throw new InternalError("Mongo URI not found", {
         uri: uri,

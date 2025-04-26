@@ -6,9 +6,7 @@ import {seedProperties} from "./data/property-seeds";
 const app = require("./app");
 
 const startServer = async () => {
-  const devEnvPath = path.resolve(__dirname, "../..", "dev.env");
-  dotenv.config({ path: devEnvPath });
-  const port = process.env.DEV_PORT ? process.env.DEV_PORT : process.env.PORT || 3333;
+  const port = process.env.PORT || 3333;
   connectDB();
   await seedProperties();
   app.listen(port, () => {
