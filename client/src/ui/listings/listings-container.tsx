@@ -42,11 +42,10 @@ export default function ListingsContainer({
 }: {
   listings: ListingProps[];
 }) {
-    console.log(listings);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 space-y-4 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {listings.map((listing) => (
-        <div key={listing.title}>
+        <div key={listing.title} className="h-full">
           <Listing listing={listing} />
         </div>
       ))}

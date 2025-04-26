@@ -18,8 +18,8 @@ interface ListingQueryParams {
 }
 
 type ListingsQuery = {
-  type?: string;
-  title?: string;
+  type?: object;
+  title?: object;
   price?: Record<string, number>;
   location?: Record<string, any>;
 };
@@ -126,14 +126,14 @@ export const getListings = asyncHandler(async (
 
   const query: ListingsQuery = {};
   const sortOptions: ListingSortOptions = {};
-
-  if (req.query.type) {
-    query.type = req.query.type;
-  }
+logger.info("Query", req.query)
+if (req.query.type) {
+  query.type = { $in: req.query.type };
+}
 
   if (req.query.title) {
-    query.title = req.query.title;
-  }
+    query.title = { $regex: req.query.title, $options: 'i' };
+}
 
   // Handle price range
   if (req.query.minPrice || req.query.maxPrice) {

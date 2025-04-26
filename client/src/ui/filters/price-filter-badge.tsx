@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FunnelPlus, FunnelX, X } from "lucide-react";
 import { Slider } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -11,8 +11,6 @@ export default function PriceFilterBadge({
   handleOpenMenu: (key: string) => void;
   appliedFilter: string;
 }) {
-  const router = useRouter();
-  const params = useSearchParams();
   const color =
     appliedFilter === "price"
       ? "bg-primary border border-white"
@@ -42,52 +40,69 @@ export default function PriceFilterBadge({
 export function PriceFilterDropdown({
   handleOpenMenu,
   handleApplyFilter,
+  handleResetFilter,
+  handleSetFilter,
+  price,
+  mode,
 }: {
-  handleOpenMenu: (key: string) => void;
-  handleApplyFilter: (key: string) => void;
+  handleOpenMenu?: (key: string) => void;
+  handleApplyFilter: () => void;
+  handleResetFilter: (resetFilter: string) => void;
+  handleSetFilter: (prices: number[]) => void;
+  price: number[];
+  mode?: "sidemenu" | "navbar";
 }) {
-  const router = useRouter();
-  const params = useSearchParams();
-  const [filter, setFilter] = useState<number[]>([-1, 1000000000000]);
-  const handleChange = (event: Event, newValue: number[]) => {
-    setFilter(newValue);
+  const handleChange = (e: Event, newValue: number[]) => {
+    handleSetFilter(newValue);
   };
-  const applyFilter = () => {
-    const searchParams = new URLSearchParams(params.toString());
-    searchParams.set("minPrice", filter[0].toString());
-    searchParams.set("maxPrice", filter[1].toString());
-    router.push(`/home?${searchParams.toString()}`);
-    handleApplyFilter("price");
-  };
-  const resetFilter = () => {
-    setFilter([-1, 1000000000000]);
-    const searchParams = new URLSearchParams(params.toString());
-    searchParams.delete("minPrice");
-    searchParams.delete("maxPrice");
-    router.push(`/home?${searchParams.toString()}`);
-    handleApplyFilter("");
-  };
+  
   return (
-    <div className="bg-white w-[300px] z-50 mt-1 py-4 px-6 rounded-lg shadow-lg">
+    <div
+      className={
+        mode == "sidemenu"
+          ? "bg-black w-[300px] z-50 mt-1 py-4 px-4"
+          : "bg-white w-[300px] z-50 mt-1 py-4 px-6 rounded-lg shadow-lg"
+      }
+    >
       <div className="mb-4">
         <div className="flex justify-between">
-          <label className="text-black text-sm font-medium">Price Range</label>
-          <div className="cursor-pointer">
-            <X size={15} color="#000000" onClick={() => handleOpenMenu("")} />
-          </div>
+          <label
+            className={
+              mode == "sidemenu"
+                ? "text-white text-sm font-medium"
+                : "text-black text-sm font-medium"
+            }
+          >
+            Price Range
+          </label>
+          {mode == "navbar" && (
+            <div className="cursor-pointer">
+              <X
+                size={15}
+                color="#000000"
+                onClick={() => handleOpenMenu && handleOpenMenu("")}
+              />
+            </div>
+          )}
         </div>
-        <div className="text-gray-500 text-xs mt-1">
-          {filter[0] === -1 ? "Any" : `EGP${filter[0].toLocaleString()}`} -{" "}
-          {filter[1] === 1000000
+        <div
+          className={
+            mode == "sidemenu"
+              ? "text-gray-200 text-xs mt-1"
+              : "text-gray-500 text-xs mt-1"
+          }
+        >
+          {price[0] === -1 ? "Any" : `EGP${price[0].toLocaleString()}`} -{" "}
+          {price[1] === 1000000
             ? "EGP1M+"
-            : `EGP${filter[1].toLocaleString()}`}
+            : `EGP${price[1].toLocaleString()}`}
         </div>
       </div>
       <Slider
         min={0}
         max={10000000}
         step={500000}
-        value={filter}
+        value={price}
         onChange={handleChange}
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => `EGP${value.toLocaleString()}`}
@@ -112,20 +127,24 @@ export function PriceFilterDropdown({
           },
         }}
       />
-      <div className="flex justify-end mt-4 space-x-2">
-        <button
-          className="bg-primary text-white text-sm px-4 py-1 rounded-lg cursor-pointer"
-          onClick={applyFilter}
-        >
-          Apply
-        </button>
-        <button
-          className="text-black border border-black text-sm px-4 py-1 rounded-lg cursor-pointer"
-          onClick={resetFilter}
-        >
-          Clear Filter
-        </button>
-      </div>
+      {mode == "navbar" && (
+        <div className="flex justify-end mt-4 space-x-2">
+          <button
+            className="bg-primary text-white text-sm px-4 py-1 rounded-lg cursor-pointer"
+            onClick={handleApplyFilter}
+          >
+            Apply
+          </button>
+          <button
+            className={
+              "text-black border border-black text-sm px-4 py-1 rounded-lg cursor-pointer"
+            }
+            onClick={() => handleResetFilter("price")}
+          >
+            Clear Filter
+          </button>
+        </div>
+      )}
     </div>
   );
 }

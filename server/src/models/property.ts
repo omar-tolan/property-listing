@@ -36,7 +36,7 @@ import mongoose, { Document, Schema } from "mongoose";
   *           example: Spacious villa with modern design and premium finishing
   *         images:
   *            type: array
-  *            description: Array of image URLs for the property
+  *            description: Array of image strings for the property
   *            items:
   *              type: string
   *              example: ["pic1.jpg", "pic2.jpg"]
@@ -87,7 +87,7 @@ import mongoose, { Document, Schema } from "mongoose";
   *           example: Fully Finished
   *         plans:
   *           type: array
-  *           description: Array of image urls for unit plans
+  *           description: Array of image strings for unit plans
   *           items:
   *             type: string
   *             example: ["plan1.jpg", "plan2.jpg"]

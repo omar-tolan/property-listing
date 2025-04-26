@@ -5,8 +5,9 @@ import PriceFilterBadge, {
   PriceFilterDropdown,
 } from "@/ui/filters/price-filter-badge";
 import TypeFilterBadge, { TypeFilterDropdown } from "./type-filter-badge";
+import { useRouter, useSearchParams } from "next/navigation";
 
-type Filters = {
+export type Filters = {
   price: {
     min: number;
     max: number;
@@ -24,9 +25,105 @@ export type FilterProps = {
   active: boolean;
 };
 
-export default function FiltersContainer() {
+export default function FiltersContainer({
+  className,
+}: {
+  className?: string;
+}) {
   const [openMenu, setOpenMenu] = useState("");
   const [appliedFilter, setAppliedFilter] = useState("");
+  const router = useRouter();
+  const params = useSearchParams();
+  const minPrice =
+    params.get("minPrice") == null ? -1 : Number(params.get("minPrice"));
+  const maxPrice =
+    params.get("maxPrice") == null
+      ? 1000000000000
+      : Number(params.get("maxPrice"));
+  const selectedTypes = params.get("type")?.split(",") || [];
+  const [filters, setFilters] = useState<Filters>({
+    price: {
+      min: minPrice,
+      max: maxPrice,
+      active: minPrice != -1 && maxPrice != 1000000000000,
+    },
+    types: {
+      values: selectedTypes,
+      active: selectedTypes != null && selectedTypes.length != 0,
+    },
+  });
+  const handleSetPriceFilter = (newPrices: number[]) => {
+    const filter: Filters = {
+      price: {
+        min: newPrices[0],
+        max: newPrices[1],
+        active: minPrice != -1 && maxPrice != 1000000000000,
+      },
+      types: filters.types,
+    };
+    setFilters(filter);
+  };
+  const handleSetTypesFilter = (newTypes: string[]) => {
+    const filter: Filters = {
+      price: filters.price,
+      types: {
+        values: newTypes,
+        active: newTypes.length != 0 && newTypes != null,
+      },
+    };
+    setFilters(filter);
+  };
+  const applyFilter = () => {
+    const searchParams = new URLSearchParams(params.toString());
+    searchParams.set("minPrice", filters.price.min.toString());
+    searchParams.set("maxPrice", filters.price.max.toString());
+    if (filters.types.values.length > 0) {
+      searchParams.set("type", filters.types.values.join(","));
+    }
+    router.push(`/home?${searchParams.toString()}`);
+  };
+  const resetFilter = (resetFilter?: string) => {
+    const searchParams = new URLSearchParams(params.toString());
+    if (!resetFilter) {
+      searchParams.delete("minPrice");
+      searchParams.delete("maxPrice");
+      searchParams.delete("types");
+      setFilters({
+        price: {
+          min: -1,
+          max: 1000000000000,
+          active: false,
+        },
+        types: {
+          values: [],
+          active: false,
+        },
+      });
+    }
+    if (resetFilter == "price") {
+      searchParams.delete("minPrice");
+      searchParams.delete("maxPrice");
+      setFilters({
+        price: {
+          min: -1,
+          max: 1000000000000,
+          active: false,
+        },
+        types: filters.types,
+      });
+    }
+    if (resetFilter == "types") {
+      searchParams.delete("type");
+      setFilters({
+        price: filters.price,
+        types: {
+          values: [],
+          active: false,
+        },
+      });
+    }
+    router.push(`/home?${searchParams.toString()}`);
+  };
   const handleOpenMenu = (key: string) => {
     setOpenMenu(key);
   };
@@ -34,7 +131,11 @@ export default function FiltersContainer() {
     setAppliedFilter(key);
   };
   return (
-    <div className="flex relative space-x-2 items-center p-4 bg-black">
+    <div
+      className={
+        "flex relative space-x-2 items-center p-4 bg-black " + className
+      }
+    >
       <div className="flex flex-row items-center">
         <SlidersHorizontal size={20} color="white" />
         <div className="text-white text-md font-extralight px-2 py-3 border-r-1 border-gray-500">
@@ -55,13 +156,21 @@ export default function FiltersContainer() {
             {openMenu === "price" && (
               <PriceFilterDropdown
                 handleOpenMenu={handleOpenMenu}
-                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={resetFilter}
+                handleApplyFilter={applyFilter}
+                handleSetFilter={handleSetPriceFilter}
+                price={[filters.price.min, filters.price.max]}
+                mode="navbar"
               />
             )}
             {openMenu === "type" && (
               <TypeFilterDropdown
                 handleOpenMenu={handleOpenMenu}
-                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={resetFilter}
+                handleApplyFilter={applyFilter}
+                handleSetFilter={handleSetTypesFilter}
+                selectedTypes={filters.types.values}
+                mode="navbar"
               />
             )}
           </div>

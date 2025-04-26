@@ -1,38 +1,62 @@
-import { MapPinIcon } from "lucide-react";
 import { ListingProps } from "./listings-container";
+import Features from "./components/features";
+import Location from "./components/location";
+import Header from "./components/header";
+import Description from "./components/description";
+import { Price } from "./components/price";
+import Image from "next/image";
+import Finishing from "./components/finishing";
+import CreatedAt from "./components/created-at";
+import Amenities from "./components/amenities";
 export default function Listing({ listing }: { listing: ListingProps }) {
-  let priceString = listing.price.toString()
-  const length = priceString.length;
-  for (let i = length - 3; i > 0; i -= 3) {
-    priceString = priceString.slice(0, i) + "," + priceString.slice(i);
-  }
-  const iconsColor = "#FE7743"
   return (
-    <div className="flex flex-col h-[70vh] bg-black border border-white pb-4 rounded-2xl">
-      <div className="text-black text-center bg-white w-full h-[50%] rounded-t-2xl">
-        Photo
+    <div className="flex flex-col h-full bg-black border border-white/10 overflow-hidden rounded-2xl">
+      <div className="relative w-full aspect-video">
+        <Image
+          src={listing.images[0]}
+          alt={listing.title}
+          fill
+          style={{ objectFit: "cover" }}
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
       </div>
-      <div className="flex flex-col items-start p-4">
-        <div className="flex w-full justify-between items-start">
-          <div className="flex flex-col">
-            <div className="text-gray-400 text-sm font-medium">
-              {listing.type}
+      <div className="flex flex-col flex-grow p-6">
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex flex-col w-full space-y-4">
+            <div className="flex w-full justify-between items-start">
+              <Header
+                title={listing.title}
+                type={listing.type}
+                className="flex-1 border-b border-gray-800 pb-2"
+              />
+              <div className="flex flex-col md:items-center space-y-2">
+                <Location
+                  location={listing.location.title}
+                  compound={listing.compound.name}
+                />
+                <Finishing finishing={listing.finishing} />
+                <Features
+                  bedrooms={listing.features.bedrooms}
+                  bathrooms={listing.features.bathrooms}
+                  space={listing.area.unit}
+                />
+              </div>
             </div>
-            <div className="text-white text-lg font-medium">
-              {listing.title}
+            <Price price={listing.price} />
+            <Description description={listing.description} />
+            <div className="flex flex-row align-baseline justify-between">
+              {/* <div className="flex flex-col space-y-4">
+
+                <CreatedAt createdAt={listing.createdAt} className="h-full " />
+              </div> */}
+              <Amenities amenities={listing.compound.amenities} className="" />
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <MapPinIcon size={20} color={iconsColor} />
-            <span className="text-white text-sm font-light">
-              {listing.location.title}
-            </span>
           </div>
         </div>
-        <div className="w-full">
-          <div className="text-white text-2xl font-light">
-            {priceString} EGP
-          </div>
+        <div className="flex-grow"></div>
+        <div className="mt-auto">
+          <CreatedAt createdAt={listing.createdAt} className="text-gray-400 text-sm" />
         </div>
       </div>
     </div>

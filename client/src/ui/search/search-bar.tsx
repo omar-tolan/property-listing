@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export function SearchBar() {
+export function SearchBar({className}: {className?: string}) {
   const searchParams = useSearchParams()
   const currentSearch = searchParams.get("search")
     const [searchString, setSearchString] = useState(currentSearch || "")
@@ -16,7 +16,7 @@ export function SearchBar() {
         router.push(`/home?${params.toString()}`)
     }
     return (
-    <div className="flex justify-center space-x-2 items-center p-4 bg-black">
+    <div className={"flex justify-center space-x-2 items-center p-4 bg-black "+className}>
       <form onSubmit={handleSearch}>
         <input
           placeholder="search for a property, location, compound"

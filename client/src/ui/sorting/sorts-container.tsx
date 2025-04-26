@@ -10,7 +10,13 @@ export type SortOptions = {
   recent: 0 | 1 | -1;
 };
 
-export function SortsContainer() {
+export function SortsContainer({
+  className,
+  mode,
+}: {
+  className?: string;
+  mode?: "sidemenu" | "navbar";
+}) {
   const [sortOptions, setSortOptions] = useState<SortOptions>({
     price: 0,
     location: 0,
@@ -34,8 +40,8 @@ export function SortsContainer() {
     setSortOptions(newSortOptions);
     const params = new URLSearchParams(searchParams.toString());
     Object.keys(sortOptions).forEach((option) => {
-      if(params.get(option)) params.delete(option);;
-    })
+      if (params.get(option)) params.delete(option);
+    });
     params.set(
       key,
       newSortOptions[key as keyof SortOptions] === 1 ? "asc" : "desc"
@@ -44,10 +50,10 @@ export function SortsContainer() {
     router.push(`/home?${params.toString()}`);
   };
   return (
-    <div className="flex space-x-2 items-center p-4 bg-black">
+    <div className={mode == "sidemenu" ? "flex-col" : "flex space-x-2 items-center p-4 bg-black " + className}>
       <div className="flex flex-row items-center">
         <ArrowUpDownIcon color="white" />
-        <div className="text-white text-md font-extralight px-2 py-3 border-r-1 border-gray-500">
+        <div className={mode == "sidemenu" ? "text-white text-md font-extralight px-2 py-3" : "text-white text-md font-extralight px-2 py-3 border-r-1 border-gray-500"}>
           Sort By
         </div>
       </div>
