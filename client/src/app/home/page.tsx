@@ -19,37 +19,38 @@ export type Params = {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   try {
+    const rawParams: any =  await searchParams
     const params: Params = {
       //Search Term
       searchString:
-        typeof searchParams?.search === "string" ? searchParams.search : null,
+        typeof rawParams?.search === "string" ? rawParams.search : null,
       // Property Types
       type:
-        typeof searchParams?.type === "string"
-          ? searchParams.type.split(",")
+        typeof rawParams?.type === "string"
+          ? rawParams.type.split(",")
           : null,
       // Price Filters
-      minPrice: searchParams?.minPrice ? Number(searchParams.minPrice) : null,
-      maxPrice: searchParams?.maxPrice ? Number(searchParams.maxPrice) : null,
+      minPrice: rawParams?.minPrice ? Number(rawParams.minPrice) : null,
+      maxPrice: rawParams?.maxPrice ? Number(rawParams.maxPrice) : null,
       // Location Sort
       location:
-        typeof searchParams?.location === "string"
-          ? searchParams.location
+        typeof rawParams?.location === "string"
+          ? rawParams.location
           : null,
       // Price Sort
       price:
-        typeof searchParams?.price === "string" ? searchParams.price : null,
+        typeof rawParams?.price === "string" ? rawParams.price : null,
 
       // Recent Sort
       recent:
-        typeof searchParams?.recent === "string" ? searchParams.recent : null,
+        typeof rawParams?.recent === "string" ? rawParams.recent : null,
       page: 
-      typeof searchParams?.page ? Number(searchParams.page) : null,
+      typeof rawParams?.page ? Number(rawParams.page) : null,
       limit: 
-      typeof searchParams?.limit ? Number(searchParams.limit) : null,
+      typeof rawParams?.limit ? Number(rawParams.limit) : null,
     };
     const res = await getProperties(params);
     const properties: ListingProps[] = res.data;

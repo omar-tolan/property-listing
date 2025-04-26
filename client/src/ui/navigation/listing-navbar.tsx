@@ -1,11 +1,9 @@
 "use client";
 import { ArrowLeft } from "lucide-react";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 export default function ListingNavbar() {
-  const router = useRouter();
   const returnToPreviousPage = () => {
-    router.back();
+    redirect("/home")
   };
   return (
     <div className="flex justify-start space-x-2 items-center p-4">
