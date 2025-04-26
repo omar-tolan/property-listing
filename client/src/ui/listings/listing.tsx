@@ -20,7 +20,9 @@ export default function Listing({ listing }: { listing: ListingProps }) {
           alt={listing.title}
           fill
           style={{ objectFit: "cover" }}
-          priority
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwQTBBMEEiLz48L3N2Zz4="
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
       </div>
