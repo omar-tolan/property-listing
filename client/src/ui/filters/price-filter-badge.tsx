@@ -9,10 +9,10 @@ export default function PriceFilterBadge({
   appliedFilter,
 }: {
   handleOpenMenu: (key: string) => void;
-  appliedFilter: string;
+  appliedFilter: boolean;
 }) {
   const color =
-    appliedFilter === "price"
+    appliedFilter
       ? "bg-primary border border-white"
       : "bg-white border border-black";
   return (
@@ -27,7 +27,7 @@ export default function PriceFilterBadge({
         }}
       >
         <div className="text-black text-md">Price</div>
-        {appliedFilter === "price" ? (
+        {appliedFilter ? (
           <FunnelX size={15} color="#000000" />
         ) : (
           <FunnelPlus size={15} color="#000000" />

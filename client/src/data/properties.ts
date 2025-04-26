@@ -34,6 +34,9 @@ export const getProperties = async (params: Params) => {
             query["sortBy"] = "price";
             query["sortDir"] = params.price;
         }
+        if(params.limit) query["limit"] = params.limit
+        if(params.page) query["page"] = params.page
+        console.log(query)
         const response = await api.get("/listings/all", {params: query});
         return response.data;
     } catch (error) {

@@ -1,6 +1,7 @@
 import Listing from "./listing";
 
 export type ListingProps = {
+  _id: string;
   title: string;
   type: string;
   price: number;

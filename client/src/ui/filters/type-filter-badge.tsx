@@ -14,10 +14,10 @@ export default function TypeFilterBadge({
   appliedFilter,
 }: {
   handleOpenMenu: (key: string) => void;
-  appliedFilter: string;
+  appliedFilter: boolean;
 }) {
   const color =
-    appliedFilter === "type"
+    appliedFilter
       ? "bg-primary border border-white"
       : "bg-white border border-black";
   return (
@@ -32,7 +32,7 @@ export default function TypeFilterBadge({
         }}
       >
         <div className="text-black text-md">Property Type</div>
-        {appliedFilter === "type" ? (
+        {appliedFilter ? (
           <FunnelX size={15} color="#000000" />
         ) : (
           <FunnelPlus size={15} color="#000000" />

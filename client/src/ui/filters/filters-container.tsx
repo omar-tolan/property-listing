@@ -6,6 +6,7 @@ import PriceFilterBadge, {
 } from "@/ui/filters/price-filter-badge";
 import TypeFilterBadge, { TypeFilterDropdown } from "./type-filter-badge";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Price } from "../listings/components/price";
 
 export type Filters = {
   price: {
@@ -57,7 +58,7 @@ export default function FiltersContainer({
       price: {
         min: newPrices[0],
         max: newPrices[1],
-        active: minPrice != -1 && maxPrice != 1000000000000,
+        active: false,
       },
       types: filters.types,
     };
@@ -68,7 +69,7 @@ export default function FiltersContainer({
       price: filters.price,
       types: {
         values: newTypes,
-        active: newTypes.length != 0 && newTypes != null,
+        active: false,
       },
     };
     setFilters(filter);
@@ -80,6 +81,17 @@ export default function FiltersContainer({
     if (filters.types.values.length > 0) {
       searchParams.set("type", filters.types.values.join(","));
     }
+    setFilters({
+      price: {
+        active: (filters.price.min != -1 && filters.price.max != 1000000000000),
+        min: filters.price.min,
+        max: filters.price.max,
+      },
+      types: {
+        active: (filters.types.values.length != 0),
+        values: filters.types.values 
+      }
+    })
     router.push(`/home?${searchParams.toString()}`);
   };
   const resetFilter = (resetFilter?: string) => {
@@ -146,11 +158,11 @@ export default function FiltersContainer({
         <div className="flex space-x-2 relative">
           <PriceFilterBadge
             handleOpenMenu={handleOpenMenu}
-            appliedFilter={appliedFilter}
+            appliedFilter={filters.price.active}
           />
           <TypeFilterBadge
             handleOpenMenu={handleOpenMenu}
-            appliedFilter={appliedFilter}
+            appliedFilter={filters.types.active}
           />
           <div className="absolute top-[calc(100%+0.25rem)] left-0 right-0">
             {openMenu === "price" && (
