@@ -19,7 +19,7 @@ Make sure you have the following installed on your machine:
   - [Install Docker](https://docs.docker.com/get-docker/)
 - Docker Compose
   - [Install Docker Compose](https://docs.docker.com/compose/install/)
-  - 
+
 ### Getting Started
 1. Clone the repository
 ```bash
