@@ -26,10 +26,8 @@ export default function PropertyDetails({
 
   return (
     <div className="flex flex-col space-y-8">
-      {/* Property Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="flex-1 space-y-4">
-          {/* Type and Finishing Badge */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full">
               <Home size={16} />
@@ -38,7 +36,6 @@ export default function PropertyDetails({
             <Finishing finishing={property.finishing} />
           </div>
 
-          {/* Title and Location */}
           <div className="space-y-2">
             <h1 className="text-2xl md:text-3xl font-bold text-white">{property.title}</h1>
             <div className="flex items-center gap-2 text-white/70">
@@ -47,12 +44,10 @@ export default function PropertyDetails({
             </div>
           </div>
 
-          {/* Description */}
           <p className="text-white/60 leading-relaxed max-w-2xl">
             {property.description}
           </p>
 
-          {/* Compound Info */}
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
               <Home className="text-primary" size={16} />
@@ -67,7 +62,6 @@ export default function PropertyDetails({
           </div>
         </div>
 
-        {/* Contact Buttons */}
         <div className="flex gap-4">
           <button className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full transition-colors">
             <PhoneCall size={20} />

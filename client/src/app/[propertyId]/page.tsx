@@ -20,10 +20,10 @@ export default async function PropertyPage({
     },
   };
   return (
-    <div className="flex flex-col py-10 px-15 h-full items-center">
-      <div className="flex flex-col lg:flex-row h-full w-full space-x-20 justify-between items-start">
+    <div className="flex flex-col px-8 py-10 lg:px-15 h-full items-center justify-center">
+      <div className="flex flex-col space-y-5 lg:flex-row h-full w-full lg:space-x-20 lg:justify-between items-start">
         <div className="flex flex-col w-full">
-          <div className="relative w-[60dvw] max-h-[70dvh] rounded-lg overflow-hidden">
+          <div className="relative w-full lg:w-[60dvw] max-h-[70dvh] rounded-lg overflow-hidden">
             <ImageCarousel
               images={[...listing.images, ...listing.plans]}
               className="w-full h-[50dvh]"
