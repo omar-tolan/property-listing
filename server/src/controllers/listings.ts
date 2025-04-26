@@ -5,6 +5,20 @@ import { ResourceCreatedResponse, SuccessResponse } from "../core/responses";
 import asyncHandler from "../utils/async-handler";
 import logger from "../config/logger";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Listings
+ *   description: Property listing management
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Listings
+ *   description: Property listing management
+ */
+
 interface ListingQueryParams {
   type?: string;
   title?: string;
@@ -192,6 +206,40 @@ if (req.query.type) {
   }).send(res);
 });
 
+/**
+ * @swagger
+ * /listings/{id}:
+ *   get:
+ *     summary: Get property details by ID
+ *     description: Retrieves detailed information about a specific property
+ *     tags: [Listings]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The property ID (MongoDB ObjectId)
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Unit details fetched successfully"
+ *                 data:
+ *                   $ref: '#/components/schemas/Property'
+ *       400:
+ *         description: Bad Request - Invalid ID format
+ *       404:
+ *         description: Not Found - Property with the specified ID does not exist
+ *       500:
+ *         description: Internal Server Error
+ */
 export const getPropertyDetails = asyncHandler(async(req: Request, res: Response) => {
   const unitId = req.params.id;
   const validId = /^[0-9a-fA-F]{24}$/.test(unitId);
@@ -201,6 +249,37 @@ export const getPropertyDetails = asyncHandler(async(req: Request, res: Response
   new SuccessResponse("Unit details fetched successfully", unit).send(res);
 });
 
+/**
+ * @swagger
+ * /listings:
+ *   post:
+ *     summary: Create a new property listing
+ *     description: Creates a new property listing with the provided details
+ *     tags: [Listings]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Property'
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Listing created successfully"
+ *                 data:
+ *                   $ref: '#/components/schemas/Property'
+ *       400:
+ *         description: Bad Request - Invalid request body
+ *       500:
+ *         description: Internal Server Error
+ */
 export const createListing = asyncHandler(async (req: Request, res: Response) => {
   const listing = req.body;
   if(Object.keys(listing).length === 0) throw new BadRequestError("Invalid request body", { listing });

@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
- /**
+/**
   * @swagger
   * components:
   *   schemas:
@@ -21,132 +21,169 @@ import mongoose, { Document, Schema } from "mongoose";
   *         title:
   *           type: string
   *           description: The title of the property
-  *           example: Luxury Villa in New Cairo 
+  *           example: "Luxury Villa in New Cairo"
   *         type:
   *           type: string
   *           description: The type of the property
   *           enum: ["Apartment", "House", "Villa", "Townhouse", "Penthouse", "Chalet"]
-  *           example: Villa
+  *           example: "Villa"
   *         price:
   *           type: number
   *           description: Unit overall price
+  *           minimum: 0
   *           example: 1000000
   *         description:
   *           type: string
-  *           example: Spacious villa with modern design and premium finishing
+  *           description: Detailed description of the property
+  *           example: "Spacious villa with modern design and premium finishing"
   *         images:
-  *            type: array
-  *            description: Array of image strings for the property
-  *            items:
-  *              type: string
-  *              example: ["pic1.jpg", "pic2.jpg"]
+  *           type: array
+  *           description: Array of image URLs for the property
+  *           items:
+  *             type: string
+  *           example: ["https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187_1280.jpg", "https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187_1280.jpg"]
   *         area:
   *           type: object
-  *           description: Contains all areas
+  *           description: Contains all area measurements
+  *           required:
+  *             - unit
   *           properties:
   *             unit:
   *               type: number
-  *               description: Unit Area
+  *               description: Unit Area in square meters
+  *               minimum: 0
   *               example: 500
   *             garden:
   *               type: number
-  *               description: Garden Area
+  *               description: Garden Area in square meters
+  *               minimum: 0
+  *               default: 0
   *               example: 100
   *             terrace:
   *               type: number
-  *               description: Terrace Area
+  *               description: Terrace Area in square meters
+  *               minimum: 0
+  *               default: 0
   *               example: 50
   *             roof:
   *               type: number
-  *               description: Roof Area
+  *               description: Roof Area in square meters
+  *               minimum: 0
+  *               default: 0
   *               example: 200
   *             parkingArea:
   *               type: number
-  *               description: Parking Area
-  *               example: 200
+  *               description: Parking Area in square meters
+  *               minimum: 0
+  *               default: 0
+  *               example: 50
   *         features:
   *           type: object
   *           description: Property features
+  *           required:
+  *             - bathrooms
+  *             - bedrooms
   *           properties:
   *             bathrooms:
   *               type: number
   *               description: Number of bathrooms
+  *               minimum: 0
   *               example: 4
   *             bedrooms:
   *               type: number
   *               description: Number of bedrooms
+  *               minimum: 0
   *               example: 4
   *             floors:
   *               type: number
   *               description: Number of floors
+  *               minimum: 1
+  *               default: 1
   *               example: 2
   *         finishing:
   *           type: string
   *           description: Unit Finishing
   *           enum: ["Fully Finished", "Semi Finished", "Unfinished"]
-  *           example: Fully Finished
+  *           example: "Fully Finished"
   *         plans:
   *           type: array
-  *           description: Array of image strings for unit plans
+  *           description: Array of image URLs for unit floor plans
   *           items:
   *             type: string
-  *             example: ["plan1.jpg", "plan2.jpg"]
+  *           example: ["floor1.jpg", "floor2.jpg"]
   *         location:
   *           type: object
   *           description: Property location object with location type and coordinates
+  *           required:
+  *             - title
+  *             - type
+  *             - coordinates
   *           properties:
   *             title:
   *               type: string
-  *               description: location title string
-  *               example: New Cairo
+  *               description: Location title or area name
+  *               example: "New Cairo"
   *             type:
   *               type: string
-  *               example: Point
   *               enum: ["Point"]
+  *               description: GeoJSON type for the location
+  *               example: "Point"
   *             coordinates:
   *               type: array
+  *               description: Longitude and latitude coordinates [lng, lat]
   *               items:
   *                 type: number
-  *                 example: [234.112, 214.244]
+  *               example: [31.4913, 30.0171]
   *         compound:
   *           type: object
-  *           description: Compound Data
+  *           description: Compound or development information
+  *           required:
+  *             - name
+  *             - launchDate
+  *             - amenities
   *           properties:
   *             name:
   *               type: string
   *               description: Compound Name
-  *               example: Compound New Cairo
+  *               example: "Lake View Compound"
   *             launchDate:
   *               type: string
   *               format: date-time
-  *               description: project launch date
-  *               example: "2026-04-01T00:00:00Z"
+  *               description: Project launch date
+  *               example: "2023-01-01T00:00:00Z"
   *             amenities:
   *               type: array
-  *               description: An array of available unit amenities
+  *               description: An array of available compound amenities
   *               items:
   *                 type: string
-  *                 example: ["Parking Area", "Roof Top"]
+  *               example: ["Swimming Pool", "Gym", "Security", "Parking"]
   *         paymentPlan:
   *           type: object
   *           description: Available payment plans
+  *           required:
+  *             - installment
+  *             - downPayment
   *           properties:
   *             installment:
   *               type: number
   *               description: Installment percentage
+  *               default: 0
   *               example: 15
   *             downPayment:
   *               type: number
   *               description: Down Payment percentage
+  *               default: 0
   *               example: 30
   *         createdAt:
   *           type: string
-  *           format: date-time 
-  *           example: 2023-01-01T12:00:00Z
+  *           format: date-time
+  *           description: Date and time when the property was created
+  *           example: "2023-01-01T12:00:00Z"
   *         updatedAt:
   *           type: string
-  *           format: date-time 
-  *           example: 2023-01-01T12:00:00Z
+  *           format: date-time
+  *           description: Date and time when the property was last updated
+  *           example: "2023-01-01T12:00:00Z"
   */
 
 interface IProperty extends Document {
@@ -160,6 +197,7 @@ interface IProperty extends Document {
     garden: number;
     terrace: number;
     roof: number;
+    parkingArea: number;
   };
   features: {
     bathrooms: number;

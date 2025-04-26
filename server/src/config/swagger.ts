@@ -1,4 +1,5 @@
 import swaggerJSDoc from "swagger-jsdoc";
+import path from "path";
 
 const options: swaggerJSDoc.Options = {
     definition: {
@@ -8,8 +9,18 @@ const options: swaggerJSDoc.Options = {
             version: "1.0.0",
             description: "API for listing properties online",
         },
+        servers: [
+            {
+                url: "/",
+                description: "Default server",
+            },
+        ],
     },
-    apis: ["../routes/*.ts"],
-}
+    apis: [
+        path.resolve(__dirname, "../routes/*.ts"),
+        path.resolve(__dirname, "../controllers/*.ts"),
+        path.resolve(__dirname, "../models/*.ts"),
+    ],
+};
 
 export const swaggerSpec = swaggerJSDoc(options);
