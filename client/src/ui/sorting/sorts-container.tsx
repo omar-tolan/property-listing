@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export type SortOptions = {
   price: 0 | 1 | -1;
-  location: 0 | 1 | -1;
   recent: 0 | 1 | -1;
 };
 
@@ -19,7 +18,6 @@ export function SortsContainer({
 }) {
   const [sortOptions, setSortOptions] = useState<SortOptions>({
     price: 0,
-    location: 0,
     recent: 0,
   });
   const router = useRouter();
@@ -28,7 +26,6 @@ export function SortsContainer({
   const handleSortSelection = (key: string) => {
     let newSortOptions: SortOptions = {
       price: 0,
-      location: 0,
       recent: 0,
     };
     newSortOptions[key as keyof SortOptions] =
