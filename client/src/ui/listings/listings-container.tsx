@@ -12,6 +12,7 @@ export type ListingProps = {
     garden: number;
     terrace: number;
     roof: number;
+    garage: number;
   };
   features: {
     bathrooms: number;

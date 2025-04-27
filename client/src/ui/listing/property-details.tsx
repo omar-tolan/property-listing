@@ -11,6 +11,8 @@ import {
   Clock
 } from "lucide-react";
 import Finishing from "../listings/components/finishing";
+import Features from "../listings/components/features";
+import Areas from "../listings/components/areas";
 
 export default function PropertyDetails({
   property,
@@ -48,16 +50,22 @@ export default function PropertyDetails({
             {property.description}
           </p>
 
-          <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
+          <div className="flex w-full items-center gap-4 text-sm whitespace-nowrap">
+            <div className="h-10 flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
               <Home className="text-primary" size={16} />
               <span className="text-white/80">{property.compound.name}</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
+            <div className="h-10 flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
               <Clock className="text-primary" size={16} />
               <span className="text-white/80">
                 Launch: {new Date(property.compound.launchDate).toLocaleDateString()}
               </span>
+            </div>
+            <div className="h-10 flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
+              <Features bedrooms={property.features.bedrooms} bathrooms={property.features.bathrooms} space={property.area.unit} />
+            </div>
+            <div className="h-10 flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
+              <Areas garden={property.area.garden} roof={property.area.roof} terrace={property.area.terrace} garage={property.area.garage} unit={property.area.unit} />
             </div>
           </div>
         </div>
