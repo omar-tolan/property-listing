@@ -135,15 +135,14 @@ export const getListings = asyncHandler(async (
   res: Response
 ) => {
   const page = parseInt(req.query.page || "1");
-  const limit = Math.min(parseInt(req.query.limit || "10"), 50);
+  const limit = Math.min(parseInt(req.query.limit || "9"), 50);
   const skip = (page - 1) * limit;
 
   const query: ListingsQuery = {};
   const sortOptions: ListingSortOptions = {};
-logger.info("Query", req.query)
-if (req.query.type) {
-  query.type = { $in: req.query.type };
-}
+  if (req.query.type) {
+    query.type = { $in: req.query.type };
+  }
 
   if (req.query.title) {
     query.title = { $regex: req.query.title, $options: 'i' };

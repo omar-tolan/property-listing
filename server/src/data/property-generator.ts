@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const generateProperties = async () => {
     try {
-        dotenv.config({ path: "./dev.env" });
+        dotenv.config();
         await connectDB();
         console.log("Connected to database");
         await seedProperties();

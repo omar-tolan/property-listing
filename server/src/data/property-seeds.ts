@@ -1,4 +1,18 @@
 import { Property } from "../models/property";
+
+// Image URLs based on property type
+const propertyImages = {
+  "Building": "https://cdn.pixabay.com/photo/2015/07/08/10/29/appartment-building-835817_960_720.jpg",
+  "Home": "https://cdn.pixabay.com/photo/2015/11/06/11/39/single-family-home-1026368_960_720.jpg",
+  "Penthouse": "https://cdn.pixabay.com/photo/2014/06/21/20/16/real-estate-374107_960_720.jpg",
+  "Townhouse": "https://cdn.pixabay.com/photo/2021/02/03/02/34/townhouse-5976262_960_720.jpg",
+  "Villa": "https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187_1280.jpg",
+  "Apartment": "https://cdn.pixabay.com/photo/2015/07/08/10/29/appartment-building-835817_960_720.jpg"
+};
+
+// Plan image URL
+const planImage = "https://cdn.pixabay.com/photo/2014/05/26/07/53/blueprint-354233_1280.jpg";
+
 const propertySeeds = [
   {
     title: "Luxury Villa in New Cairo",
@@ -598,8 +612,26 @@ export const seedProperties = async () => {
       return;
     }
 
-    console.log(`Inserting ${propertySeeds.length} properties...`);
-    await Property.insertMany(propertySeeds);
+    // Update images and plans based on property type
+    const updatedPropertySeeds = propertySeeds.map(property => {
+      // Get the correct images based on property type
+      const images = propertyImages[property.type as keyof typeof propertyImages] || propertyImages["Apartment"];
+
+      // Update plans if they exist
+      let plans = property.plans;
+      if (plans && plans.length > 0) {
+        plans = plans.map(() => planImage);
+      }
+
+      return {
+        ...property,
+        images: [images, images],
+        ...(plans && { plans })
+      };
+    });
+
+    console.log(`Inserting ${updatedPropertySeeds.length} properties...`);
+    await Property.insertMany(updatedPropertySeeds);
     console.log("Properties inserted successfully");
   } catch (error) {
     console.error("Error seeding properties:", error);

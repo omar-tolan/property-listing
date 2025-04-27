@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-import path from "path";
+// Load environment variables from .env file
+dotenv.config();
 import logger from "./config/logger";
 import { connectDB } from "./config/db";
 import {seedProperties} from "./data/property-seeds";

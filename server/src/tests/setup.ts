@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { seedProperties } from "../data/property-seeds";
 import { cleanUpDb } from "./utils/cleanup";
 
-dotenv.config({ path: "./dev.env" });
+dotenv.config();
 
 const testDBUrl = process.env.MONGO_URI;
 
@@ -23,8 +23,8 @@ beforeAll(async() => {
 
 afterAll(async() => {
     try{
-        await cleanUpDb()        
-        await mongoose.connection.close()        
+        await cleanUpDb()
+        await mongoose.connection.close()
     }catch(error){
         throw new Error("Failed to close test database connection")
     }

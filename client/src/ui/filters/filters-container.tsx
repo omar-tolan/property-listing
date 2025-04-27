@@ -1,5 +1,5 @@
 "use client";
-import { SlidersHorizontal } from "lucide-react";
+import { FunnelPlus, FunnelX, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import PriceFilterBadge, {
   PriceFilterDropdown,
@@ -83,15 +83,15 @@ export default function FiltersContainer({
     }
     setFilters({
       price: {
-        active: (filters.price.min != -1 && filters.price.max != 1000000000000),
+        active: filters.price.min != -1 && filters.price.max != 1000000000000,
         min: filters.price.min,
         max: filters.price.max,
       },
       types: {
-        active: (filters.types.values.length != 0),
-        values: filters.types.values 
-      }
-    })
+        active: filters.types.values.length != 0,
+        values: filters.types.values,
+      },
+    });
     router.push(`/home?${searchParams.toString()}`);
   };
   const resetFilter = (resetFilter?: string) => {
@@ -99,7 +99,7 @@ export default function FiltersContainer({
     if (!resetFilter) {
       searchParams.delete("minPrice");
       searchParams.delete("maxPrice");
-      searchParams.delete("types");
+      searchParams.delete("type");
       setFilters({
         price: {
           min: -1,
@@ -164,6 +164,16 @@ export default function FiltersContainer({
             handleOpenMenu={handleOpenMenu}
             appliedFilter={filters.types.active}
           />
+          <div className="inline-block relative">
+            <button
+              className={`flex space-x-2 px-4 py-1 items-center rounded-lg bg-white ${ !(filters.price.active || filters.types.active) ? "opacity-40" : "cursor-pointer hover:bg-white/90"}`}
+              onClick={() => {
+                resetFilter();
+              }}
+            >
+              <div className="text-black text-md">Clear Filters</div>
+            </button>
+          </div>
           <div className="absolute top-[calc(100%+0.25rem)] left-0 right-0">
             {openMenu === "price" && (
               <PriceFilterDropdown

@@ -4,6 +4,7 @@ import { ApiError } from "@/core/api-error";
 import ListingsContainer from "@/ui/listings/listings-container";
 import { ListingProps } from "@/ui/listings/listings-container";
 import NoResults from "@/ui/errors/no-results";
+import Pagination from "@/ui/pagination/pagination";
 
 export type Params = {
   searchString: string | null;
@@ -78,6 +79,7 @@ export default async function Home({
     return (
       <div>
         <ListingsContainer listings={properties} />
+        <Pagination pages={res.pagination.pages}/>
       </div>
     );
   } catch (error) {
