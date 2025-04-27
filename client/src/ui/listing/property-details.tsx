@@ -50,7 +50,7 @@ export default function PropertyDetails({
             {property.description}
           </p>
 
-          <div className="flex w-full items-center gap-4 text-sm whitespace-nowrap">
+          <div className="flex flex-wrap w-full items-center gap-4 text-sm whitespace-nowrap">
             <div className="h-10 flex items-center gap-2 bg-white/5 px-3 py-2 rounded-lg">
               <Home className="text-primary" size={16} />
               <span className="text-white/80">{property.compound.name}</span>
